@@ -1,0 +1,5 @@
+.idea/
+node_modules/
+client/dev/bower_components
+server/**/*.js
+client/dev/js/**/*.js
