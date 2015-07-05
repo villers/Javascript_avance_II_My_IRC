@@ -1,5 +1,6 @@
 .idea/
 node_modules/
-client/dev/bower_components
 server/**/*.js
-client/dev/js/**/*.js
+client/js/**/*.js
+client/css/**/*.css
+client/bower_components/
