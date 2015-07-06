@@ -18,7 +18,7 @@ var _ts = '**/*.ts';
 
 gulp.task('ts', function(){
 	gulp.src([_ts, '!node_modules/**'])
-		.pipe(typescript())
+		.pipe(typescript({target: 'ES5'}))
 		.pipe(gulp.dest('.'))
 });
 
