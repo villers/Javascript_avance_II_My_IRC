@@ -3,8 +3,8 @@
 'use strict';
 
 import * as express from 'express';
-import {SocketEvents} from 'controllers/socket/socket-events';
-import {StaticDispatcher} from 'controllers/static/static-dispatcher';
+import {SocketEvents} from './controllers/socket/socket-events';
+import {StaticDispatcher} from './controllers/static/static-dispatcher';
 
 var PORT = 3333;
 
