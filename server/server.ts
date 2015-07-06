@@ -1,18 +1,18 @@
 /// <reference path="all.d.ts" />
-
+// https://github.com/tamaspiros/advanced-chat/blob/master/room.js
 'use strict';
+
+import * as express from 'express';
+import {SocketEvents} from 'controllers/socket/socket-events';
+import {StaticDispatcher} from 'controllers/static/static-dispatcher';
 
 var PORT = 3333;
 
-import * as express from 'express';
-import {SocketEvents} from './commons/socket/socket-events';
-import {StaticDispatcher} from './commons/static/static-dispatcher';
+var app: any = express();
+var server: any = app.listen(PORT);
+var socket: SocketIO.Socket = require('socket.io').listen(server);
 
-var app = express();
-var http = app.listen(PORT);
-var io = require('socket.io').listen(http);
-
-StaticDispatcher.init(app, express);
-SocketEvents.init(io);
+StaticDispatcher.init(app);
+SocketEvents.init(socket);
 
 console.log('listening on *:' + PORT);

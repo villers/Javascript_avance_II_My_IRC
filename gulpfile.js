@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var gulp = require('gulp');
 var del = require('del');
@@ -18,16 +18,16 @@ var _ts = '**/*.ts';
 
 gulp.task('ts', function(){
 	gulp.src([_ts, '!node_modules/**'])
-	.pipe(typescript())
-	.pipe(gulp.dest('.'))
+		.pipe(typescript())
+		.pipe(gulp.dest('.'))
 });
 
 gulp.task('style', function () {
 	gulp.src(_style)
-	.pipe(stylus({
-		compress: true
-	}))
-	.pipe(gulp.dest(CLIENT_DIR+ 'css'));
+		.pipe(stylus({
+			compress: true
+		}))
+		.pipe(gulp.dest(CLIENT_DIR+ 'css'));
 });
 
 gulp.task('browser_sync', function()
@@ -53,9 +53,9 @@ gulp.task('watch', ['ts', 'style', 'browser_sync'], function()
 gulp.task('default', ['ts', 'style']);
 gulp.task('serve', ['default', 'watch'], function(){
 	nodemon({
-	  script: 'index.js',
-	  tasks: ['browser_sync'],
-	  ext: 'ts',
-	  ignore: ["client/*"]
+		script: 'index.js',
+		tasks: ['browser_sync'],
+		ext: 'ts',
+		ignore: ["client/*"]
 	});
 });

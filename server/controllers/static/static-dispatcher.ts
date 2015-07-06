@@ -1,14 +1,16 @@
 /// <reference path="../../all.d.ts" />
 
-"use strict";
+'use strict';
+
+import * as express from 'express';
 
 export class StaticDispatcher
 {
-    static init(app, express):void
-    {
+	static init(app):void
+	{
 		app.use('/', express.static(process.cwd() + '/client/'));
 		app.get('/', (req, res) => {
 			res.sendfile(__dirname + '/client/index.html');
 		});
-    }
+	}
 }

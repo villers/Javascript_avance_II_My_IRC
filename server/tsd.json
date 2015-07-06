@@ -1,21 +1,24 @@
 {
-  "version": "v4",
-  "repo": "borisyankov/DefinitelyTyped",
-  "ref": "master",
-  "path": "typings",
-  "bundle": "typings/tsd.d.ts",
-  "installed": {
-    "node/node.d.ts": {
-      "commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
-    },
-    "express/express.d.ts": {
-      "commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
-    },
-    "serve-static/serve-static.d.ts": {
-      "commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
-    },
-    "mime/mime.d.ts": {
-      "commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
-    }
-  }
+	"version": "v4",
+	"repo": "borisyankov/DefinitelyTyped",
+	"ref": "master",
+	"path": "typings",
+	"bundle": "typings/tsd.d.ts",
+	"installed": {
+		"node/node.d.ts": {
+			"commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
+		},
+		"express/express.d.ts": {
+			"commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
+		},
+		"serve-static/serve-static.d.ts": {
+			"commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
+		},
+		"mime/mime.d.ts": {
+			"commit": "d73cbcb405788eb85cc4a4167b963ef4dd630cdc"
+		},
+		"socket.io/socket.io.d.ts": {
+			"commit": "880cebd19186d06014e341718b24c8eb231060cb"
+		}
+	}
 }
