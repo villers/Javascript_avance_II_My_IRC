@@ -22,14 +22,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mickael.villers@epitech.eu/Javascript_avance_II_My_IRC.git"
+    "url": "https://github.com/villers/Javascript_avance_II_My_IRC.git"
   },
-  "author": "mickael.villers@epitech.eu",
+  "author": "Mickaël VILLERS <mickael.villers@epitech.eu>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mickael.villers@epitech.eu/Javascript_avance_II_My_IRC/issues"
+    "url": "https://github.com/villers/Javascript_avance_II_My_IRC/issues"
   },
-  "homepage": "https://github.com/mickael.villers@epitech.eu/Javascript_avance_II_My_IRC",
+  "homepage": "https://github.com/villers/Javascript_avance_II_My_IRC",
   "engines": {
     "node": "=> 0.12.x"
   }
