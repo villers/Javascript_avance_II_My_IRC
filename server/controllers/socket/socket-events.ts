@@ -8,7 +8,7 @@ export class SocketEvents
 	{
 		io.on('connection', function(client: SocketIO.Socket)
 		{
-			client.on('signIn', (signInfos: ISignInfos) -> {
+			client.on('signIn', (signInfos: ISignInfos) => {
 				console.log(signInfos);
 			});
 		});

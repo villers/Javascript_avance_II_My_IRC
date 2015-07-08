@@ -1,8 +1,9 @@
 /// <reference path="typings/tsd.d.ts" />
-declare var DataView;
-declare var Map;
-declare var Set;
-declare var WeakMap;
+interface DataViewConstructor {}
+declare var DataView: DataViewConstructor;
+declare var Map: any;
+declare var Set: any;
+declare var WeakMap: any;
 
 /// <reference path="server.ts" />
 /// <reference path="entities/user.ts" />

@@ -1,36 +1,39 @@
 {
-	"name": "Javascript_avance_II_My_IRC",
-	"version": "0.0.1",
-	"main": "src/Javascript_avance_II_My_IRC.js",
-	"scripts": {
-		"serve": "gulp && gulp serve",
-		"start": "node index",
-		"clean": "gulp clean"
-	},
-	"dependencies": {
-		"express": "~4.12.3",
-		"socket.io": "^1.3.5",
-		"socket.io-client": "^1.3.5"
-	},
-	"devDependencies": {
-		"browser-sync": "^2.5.2",
-		"del": "^1.1.1",
-		"gulp": "^3.8.11",
-		"gulp-nodemon": "^2.0.3",
-		"gulp-stylus": "^2.0.5",
-		"gulp-tsc": "^0.10.1"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/villers/Javascript_avance_II_My_IRC.git"
-	},
-	"author": "Mickaël VILLERS <mickael.villers@epitech.eu>",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/villers/Javascript_avance_II_My_IRC/issues"
-	},
-	"homepage": "https://github.com/villers/Javascript_avance_II_My_IRC",
-	"engines": {
-		"node": "=> 0.12.x"
-	}
+  "name": "Javascript_avance_II_My_IRC",
+  "version": "0.0.1",
+  "main": "src/Javascript_avance_II_My_IRC.js",
+  "scripts": {
+    "serve": "gulp && gulp serve",
+    "start": "node index",
+    "clean": "gulp clean"
+  },
+  "dependencies": {
+    "express": "~4.12.3",
+    "socket.io": "^1.3.5",
+    "socket.io-client": "^1.3.5"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.5.2",
+    "core-util-is": "^1.0.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.11",
+    "gulp-nodemon": "^2.0.3",
+    "gulp-stylus": "^2.0.5",
+    "gulp-tsc": "^0.10.1",
+    "inherits": "^2.0.1",
+    "process-nextick-args": "^1.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/villers/Javascript_avance_II_My_IRC.git"
+  },
+  "author": "Mickaël VILLERS <mickael.villers@epitech.eu>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/villers/Javascript_avance_II_My_IRC/issues"
+  },
+  "homepage": "https://github.com/villers/Javascript_avance_II_My_IRC",
+  "engines": {
+    "node": "=> 0.12.x"
+  }
 }
