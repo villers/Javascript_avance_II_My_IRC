@@ -1,38 +1,23 @@
 /// <reference path="../all.d.ts" />
-
-interface  IRoom {
+import {User} from './user';
+export class Room {
 	name: string;
-	id: number;
-	owner: IUser;
-	users: IUser[];
+	owner: User;
+	users: User[];
 	private: boolean;
 
-	addUser(user: IUser): void;
-	getUser(id: number): IUser;
-	getListUser(): IUser[];
-	isPrivate(): boolean;
-	removeUser(id: number): void;
-}
-
-class Room implements IRoom{
-	name: string;
-	id: number;
-	owner: IUser;
-	users: IUser[];
-	private: boolean;
-
-	constructor(name: string, id: number, owner: IUser) {
+	constructor(name: string, owner: User) {
 		this.name = name;
-		this.id = id;
 		this.owner = owner;
+		this.users = [];
 	}
 
-	addUser(user: IUser): void {
+	addUser(user: User): void {
 		this.users.push(user);
 	}
 
-	getUser(id: number): IUser {
-		this.users.forEach((element: IUser, index: number) => {
+	getUser(id: string): User {
+		this.users.forEach((element: User, index: number) => {
 			if(element.id == id) {
 				return element;
 			}
@@ -40,19 +25,34 @@ class Room implements IRoom{
 		return undefined;
 	}
 
-	getListUser(): IUser[] {
-		return this.users;
+	getListUser(): any[] {
+		var result: any[] = [];
+		this.users.forEach((user: any)=> {
+			var tmp = {
+				id: user.id,
+				username: user.username
+			};
+			result.push(tmp);
+		});
+		return result;
 	}
 
 	isPrivate(): boolean {
 		return this.private;
 	}
 
-	removeUser(id: number): void {
-		this.users.forEach((element: IUser, index: number) => {
+	removeUser(id: string): void {
+		this.users.forEach((element: User, index: number) => {
 			if(element.id == id) {
-				this.users.splice(id, 1);
+				this.users.splice(index, 1);
 			}
 		});
+	}
+
+	toJson(): Object {
+		return {
+			name: this.name,
+			users: this.getListUser()
+		};
 	}
 }

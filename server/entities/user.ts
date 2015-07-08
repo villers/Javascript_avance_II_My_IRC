@@ -1,15 +1,17 @@
 /// <reference path="../all.d.ts" />
-interface IUser {
-	id: number;
-	name: string;
+export class User{
+	id:string;
+	username:string;
 
-}
+	constructor(id: string,username: string) {
+		this.id = id;
+		this.username = username;
+	}
 
-class User implements IUser{
-	id:number;
-	name:string;
-
-	constructor(name: string) {
-		this.name = name;
+	toJson(): Object {
+		return {
+			id: this.id,
+			username: this.username
+		};
 	}
 }

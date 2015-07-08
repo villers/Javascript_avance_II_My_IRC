@@ -14,7 +14,7 @@
 <div class="container">
 	<div class="row ">
 		<h3 class="text-center">My Chat </h3>
-		<br><br>
+
 		<div class="col-md-8">
 			<div class="panel panel-info">
 				<div class="panel-heading">
@@ -25,9 +25,9 @@
 				</div>
 				<div class="panel-footer">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Enter Message">
+						<input type="text" id="textbox" class="form-control" placeholder="Enter Message">
 							<span class="input-group-btn">
-								<button class="btn btn-info" type="button">SEND</button>
+								<button class="btn btn-info" type="button" id="send">SEND</button>
 							</span>
 					</div>
 				</div>
@@ -42,7 +42,9 @@
 					<ul class="media-list" id="users"></ul>
 				</div>
 			</div>
-
+			<div class="panel-footer">
+				Online: <span id="nbOnline"></span>
+			</div>
 		</div>
 	</div>
 </div>
@@ -59,22 +61,28 @@
 	</li>
 </script>
 <script id="user-template" type="text/x-handlebars-template">
-	<li class="media">
+	<li class="media" id="{{id}}">
 		<div class="media-body">
 			<div class="media">
 				<div class="media-body">
-					<h5>{{username}}</h5>
+					<ul>
+						<li>{{username}}</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 	</li>
 </script>
+<script id="nbOnline-template" type="text/x-handlebars-template">
+	{{nbOnline}}
+</script>
 
 
 
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
-<script src="bower_components/handlebars/handlebars.min.js"></script>
-<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="bower_components/handlebars/handlebars.min.js"></script>
+<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
 <script type="text/javascript" src="js/app.js"></script>
 </body>

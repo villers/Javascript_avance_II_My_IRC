@@ -4,6 +4,7 @@ declare var DataView: DataViewConstructor;
 declare var Map: any;
 declare var Set: any;
 declare var WeakMap: any;
+declare var io: any;
 
 /// <reference path="server.ts" />
 /// <reference path="entities/user.ts" />
