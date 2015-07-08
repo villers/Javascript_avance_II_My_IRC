@@ -8,9 +8,8 @@ export class SocketEvents
 	{
 		io.on('connection', function(client: SocketIO.Socket)
 		{
-			client.on('users:online', function()
-			{
-				io.emit('users:online', 1);
+			client.on('signIn', (signInfos: ISignInfos) -> {
+				console.log(signInfos);
 			});
 		});
 	}

@@ -10,3 +10,5 @@ $('#users').append(template_chat({username: 'John Do1'}));
 $('#users').append(template_chat({username: 'John Do2'}));
 $('#users').append(template_chat({username: 'John Do3'}));
 
+
+
