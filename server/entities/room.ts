@@ -10,19 +10,16 @@ export class Room {
 		this.name = name;
 		this.owner = owner;
 		this.users = [];
+
+		this.addUser(owner);
 	}
 
 	addUser(user: User): void {
-		this.users.push(user);
+		this.users[user.id] = user;
 	}
 
 	getUser(id: string): User {
-		this.users.forEach((element: User, index: number) => {
-			if(element.id == id) {
-				return element;
-			}
-		});
-		return undefined;
+		return this.users[id];
 	}
 
 	getListUser(): any[] {
@@ -37,16 +34,18 @@ export class Room {
 		return result;
 	}
 
+	getNbUser(): number {
+		return Object.keys(this.users).length
+	}
+
 	isPrivate(): boolean {
 		return this.private;
 	}
 
 	removeUser(id: string): void {
-		this.users.forEach((element: User, index: number) => {
-			if(element.id == id) {
-				this.users.splice(index, 1);
-			}
-		});
+		if (this.users[id]) {
+			delete this.users[id];
+		}
 	}
 
 	toJson(): Object {

@@ -30,32 +30,31 @@ gulp.task('style', function () {
 		.pipe(gulp.dest(CLIENT_DIR+ 'css'));
 });
 
-gulp.task('browser_sync', function()
-{
-	return browserSync.reload();
-});
-
 gulp.task('clean', function()
 {
 	return del.sync([_js, _js2, _css]);
 });
 
+gulp.task('browser_sync', function()
+{
+	return browserSync.reload();
+});
+
 gulp.task('watch', ['ts', 'style', 'browser_sync'], function()
 {
 	browserSync({proxy: "http://localhost:3333", reloadDelay: 1000});
-
 	var _watchable = [];
 	_watchable.push(_ts);
 	_watchable.push(_style);
 	return gulp.watch(_watchable, ['ts', 'style', 'browser_sync']);
 });
 
-gulp.task('default', ['ts', 'style']);
-gulp.task('serve', ['default', 'watch'], function(){
+gulp.task('serve', ['default'], function(){
 	nodemon({
 		script: 'index.js',
-		tasks: ['browser_sync'],
-		ext: 'ts',
+		ext: 'js',
 		ignore: ["client/*"]
 	});
 });
+
+gulp.task('default', ['ts', 'style']);

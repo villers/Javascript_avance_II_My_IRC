@@ -13,29 +13,34 @@ $('#send').click(() => {
 	textbox.val('');
 });
 
+var doLogin = $('#doLogin');
+doLogin.on('submit', (e: any) => {
+	e.preventDefault();
+
+	socket.emit('login', {username: $('#username').val(), channelname: $('#channel').val()});
+});
+
 socket.on('connect', () => {
-	console.log('connected');
+	var _user: any;
+	socket.on('logged', (user: any) => {
+		_user = user;
+		$('#login').hide();
+		$('#connected').show();
+	});
 
-	socket.emit('signIn', {userName: 'test', channelName: 'chanel1'});
-
-	socket.on('userSignedIn', (user: any) => {
+	socket.on('newUser', (user: any) => {
 		$('#users').append(template_chat(user));
+		$('#nbOnline').html(template_nbOnline({nbOnline: $('.user-row').length}));
 	});
 
-	socket.on('sendUserList', (users: any, nbOnline: number) => {
-		users.forEach((user: any) => {
-			$('#users').append(template_chat(user));
-			$('#nbOnline').html(template_nbOnline({nbOnline: nbOnline}));
-		});
-	});
-
-	socket.on('sendMessageToClients', (user: any, message: string) => {
+	socket.on('recevMessage', (user: any, message: string) => {
 		$('#messages').append(template_message({username: user.username, message: message}));
+		console.log(user, message);
 	});
 
 	socket.on('logout', (user: any) => {
+		console.log($('#' + user.id));
 		$('#' + user.id).remove();
-		console.log(user, $('#' + user.id));
 	});
 });
 
