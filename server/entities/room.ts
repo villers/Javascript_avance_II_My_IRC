@@ -4,7 +4,6 @@ export class Room {
 	name: string;
 	owner: User;
 	users: User[];
-	private: boolean;
 
 	constructor(name: string, owner: User) {
 		this.name = name;
@@ -16,10 +15,6 @@ export class Room {
 
 	addUser(user: User): void {
 		this.users[user.id] = user;
-	}
-
-	getUser(id: string): User {
-		return this.users[id];
 	}
 
 	getListUser(): any[] {
@@ -36,10 +31,6 @@ export class Room {
 
 	getNbUser(): number {
 		return Object.keys(this.users).length
-	}
-
-	isPrivate(): boolean {
-		return this.private;
 	}
 
 	removeUser(id: string): void {

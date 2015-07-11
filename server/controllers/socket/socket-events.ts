@@ -8,26 +8,30 @@
 "use strict";
 import {User} from '../../entities/user';
 import {Room} from '../../entities/room';
+import {Command} from '../../entities/command';
 export class SocketEvents
 {
 	static init(io: any): void
 	{
 		var _rooms: Room[] = [];
+		var _commands: Command;
+
 
 		// quand la connexion socket.io est réussi
 		io.on('connection', function(client: any)
 		{
 			var _user: User;
 			var _channelName: string;
+			var _commands: Command = new Command(io, client);
 
 			// quand un nouveau client ce connecte avec un login et un channel
 			client.on('login', (signInfos: ISignInfos) => {
+				_channelName = signInfos.channelname;
 
 				// création de l'utilisateur
-				_user = new User(client.id, signInfos.username);
+				_user = new User(client.id, signInfos.username, _channelName);
 
 				// création de la room ou ajout de l'utilisateur dans la room
-				_channelName = signInfos.channelname;
 				if (!_rooms[_channelName]) {
 					_rooms[_channelName] = new Room(_channelName, _user);
 				} else {
@@ -51,6 +55,7 @@ export class SocketEvents
 			});
 
 			client.on('sendMessage', (message: any) => {
+				message = _commands.parseChat(_rooms[_channelName], _user, message);
 				console.log(message);
 				if (message !== '') {
 					io.in(_channelName).emit('recevMessage', _user.toJson(), message);

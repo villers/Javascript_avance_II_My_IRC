@@ -7,6 +7,7 @@
 	<link rel="shortcut icon" type="image/ico" href="favicon.png" />
 
 	<link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+	<link type="text/css" rel="stylesheet" href="bower_components/animate.css/animate.css" />
 	<link type="text/css" rel="stylesheet" href="css/main.css" />
 </head>
 
@@ -37,7 +38,7 @@
 	</div>
 
 	<div class="row" id="connected">
-		<h3 class="text-center">My Chat </h3>
+		<h3 class="text-center">My Chat <span id="channelName"></span></h3>
 		<div class="col-md-8">
 			<div class="panel panel-info">
 				<div class="panel-heading">
@@ -73,7 +74,7 @@
 </div>
 
 <script id="message-template" type="text/x-handlebars-template">
-	<li class="media">
+	<li class="media animated bounceInLeft">
 		<div class="media-body">
 			<div class="media">
 				<div class="media-body">
@@ -84,12 +85,12 @@
 	</li>
 </script>
 <script id="user-template" type="text/x-handlebars-template">
-	<li class="media" id="{{id}}">
+	<li class="media animated fadeInLeftBig" id="{{id}}">
 		<div class="media-body">
 			<div class="media">
 				<div class="media-body">
 					<ul>
-						<li class="user-row">{{username}}</li>
+						<li class="user-row" id="name-{{id}}">{{username}}</li>
 					</ul>
 				</div>
 			</div>
@@ -97,7 +98,7 @@
 	</li>
 </script>
 <script id="nbOnline-template" type="text/x-handlebars-template">
-	{{nbOnline}}
+	<span class="animated flash">{{nbOnline}}</span>
 </script>
 
 
