@@ -55,8 +55,8 @@ export class SocketEvents
 			});
 
 			client.on('sendMessage', (message: any) => {
+				_commands.rooms = _rooms;
 				message = _commands.parseChat(_rooms[_channelName], _user, message);
-				console.log(message);
 				if (message !== '') {
 					io.in(_channelName).emit('recevMessage', _user.toJson(), message);
 				}

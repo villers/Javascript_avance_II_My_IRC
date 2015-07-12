@@ -1,6 +1,7 @@
 /// <reference path="../../server/all.d.ts" />
 
 var template_message = Handlebars.compile($("#message-template").html());
+var template_warn_message = Handlebars.compile($("#warn-message-template").html());
 var template_chat = Handlebars.compile($("#user-template").html());
 var template_nbOnline = Handlebars.compile($('#nbOnline-template').html());
 
@@ -57,6 +58,11 @@ socket.on('connect', () => {
 	// when a user has renamed
 	socket.on('renameUser', (user: any) => {
 		$('#name-' + user.id).text(user.username);
+	});
+
+	socket.on('listOfChan', (channels: String[]) => {
+		var message = 'List of channels: ' + channels.join(', ')+'.';
+		$('#messages').append(template_warn_message({message: message}));
 	});
 
 	// when a user Sign out
