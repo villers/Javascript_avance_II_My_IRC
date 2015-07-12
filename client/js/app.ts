@@ -65,6 +65,11 @@ socket.on('connect', () => {
 		$('#messages').append(template_warn_message({message: message}));
 	});
 
+	socket.on('listOfUsers', (channels: String[]) => {
+		var message = 'List of Users: ' + channels.join(', ')+'.';
+		$('#messages').append(template_warn_message({message: message}));
+	});
+
 	// when a user Sign out
 	socket.on('logout', (user: any) => {
 		$('#' + user.id).remove();

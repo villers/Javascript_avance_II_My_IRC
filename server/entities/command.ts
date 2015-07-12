@@ -44,8 +44,16 @@ export class Command {
 			return '';
 		});
 
-		this.registerCommand('users', 'List Channel Users', (currentRoom: Room, user: User, args: string[]): string => {
-			//client.emit('logged', );
+		this.registerCommand('users', 'List Users in channel', (currentRoom: Room, user: User, args: string[]): string => {
+			var result: any = [];
+			for (var usersId in currentRoom.users) {
+				var username = currentRoom.users[usersId].username;
+				if (args[0] === undefined || (args[0] && username.indexOf(args[0]) > -1)) {
+					result.push(username);
+				}
+			}
+
+			client.emit('listOfUsers', result);
 			return '';
 		});
 
