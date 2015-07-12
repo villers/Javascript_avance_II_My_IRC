@@ -14,51 +14,27 @@ export class SocketEvents
 	static init(io: any): void
 	{
 		var _rooms: Room[] = [];
-		var _commands: Command;
-
 
 		// quand la connexion socket.io est réussi
 		io.on('connection', function(client: any)
 		{
 			var _user: User;
-			var _channelName: string;
 			var _commands: Command = new Command(io, client);
 
 			// quand un nouveau client ce connecte avec un login et un channel
 			client.on('login', (signInfos: ISignInfos) => {
-				_channelName = signInfos.channelname;
-
 				// création de l'utilisateur
-				_user = new User(client.id, signInfos.username, _channelName);
+				_user = new User(client.id, signInfos.username, signInfos.channelname);
 
 				// création de la room ou ajout de l'utilisateur dans la room
-				if (!_rooms[_channelName]) {
-					_rooms[_channelName] = new Room(_channelName, _user);
-				} else {
-					_rooms[_channelName].addUser(_user);
-				}
-
-				// le client rejoin le channel
-				client.join(_channelName);
-
-				// envoi d'un message a l'utilisateur pour dire que la connexion a réussi
-				client.emit('logged', _user.toJson());
-				console.log('user: ' + _user.username + ' joined #' + _channelName);
-
-				// envoi de l'utilisateur a tous les autres
-				client.broadcast.to(_channelName).emit('newUser', _user.toJson());
-
-				// envois tous les utilisateurs a l'utilisateur courant
-				for (var k in _rooms[_channelName].users) {
-					client.emit('newUser', _rooms[_channelName].users[k].toJson());
-				}
+				SocketEvents.login(_rooms, _user, client);
 			});
 
 			client.on('sendMessage', (message: any) => {
 				_commands.rooms = _rooms;
-				message = _commands.parseChat(_rooms[_channelName], _user, message);
+				message = _commands.parseChat(_rooms[_user.channelname], _user, message);
 				if (message !== '') {
-					io.in(_channelName).emit('recevMessage', _user.toJson(), message);
+					io.in(_user.channelname).emit('recevMessage', _user.toJson(), message);
 				}
 			});
 
@@ -67,10 +43,47 @@ export class SocketEvents
 					return false;
 				}
 
-				delete _rooms[_channelName].removeUser(_user.id);
-				io.in(_channelName).emit('logout', _user.toJson());
+				SocketEvents.leaveChan(_rooms, _user.channelname, _user, client, io);
 				console.log('Logout: ', _user.username);
 			})
 		});
+	}
+
+	static login(rooms: Room[], user: User, client) {
+		if (!rooms[user.channelname]) {
+			rooms[user.channelname] = new Room(user.channelname, user);
+		} else {
+			rooms[user.channelname].addUser(user);
+		}
+
+		// le client rejoin le channel
+		client.join(user.channelname);
+
+		// envoi d'un message a l'utilisateur pour dire que la connexion a réussi
+		client.emit('logged', user.toJson());
+		console.log('user: ' + user.username + ' joined #' + user.channelname);
+
+		// envoi de l'utilisateur a tous les autres
+		client.broadcast.to(user.channelname).emit('newUser', user.toJson());
+
+		// envois tous les utilisateurs a l'utilisateur courant
+		for (var k in rooms[user.channelname].users) {
+			client.emit('newUser', rooms[user.channelname].users[k].toJson());
+		}
+
+	}
+
+	static leaveChan(rooms: Room[], channelName: string, user: User, client, io) {
+		if (rooms[channelName]) {
+			rooms[channelName].removeUser(user.id);
+			if (rooms[channelName].getNbUser() <= 0) {
+				delete rooms[channelName];
+			}
+		}
+
+		user.channelname = '';
+
+		client.leave(channelName);
+		io.in(channelName).emit('logout', user.toJson());
 	}
 }

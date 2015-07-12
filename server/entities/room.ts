@@ -13,11 +13,11 @@ export class Room {
 		this.addUser(owner);
 	}
 
-	addUser(user: User): void {
+	public addUser(user: User): void {
 		this.users[user.id] = user;
 	}
 
-	getListUser(): any[] {
+	public getListUser(): any[] {
 		var result: any[] = [];
 		this.users.forEach((user: any)=> {
 			var tmp = {
@@ -29,17 +29,17 @@ export class Room {
 		return result;
 	}
 
-	getNbUser(): number {
+	public getNbUser(): number {
 		return Object.keys(this.users).length
 	}
 
-	removeUser(id: string): void {
+	public removeUser(id: string): void {
 		if (this.users[id]) {
 			delete this.users[id];
 		}
 	}
 
-	toJson(): Object {
+	public toJson(): Object {
 		return {
 			name: this.name,
 			users: this.getListUser()

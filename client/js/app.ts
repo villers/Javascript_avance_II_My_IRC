@@ -73,7 +73,20 @@ socket.on('connect', () => {
 		$('#messages').append(template_warn_message({message: message}));
 	});
 
+	socket.on('leaveChannel', (user: any) => {
+		$('#messages')
+			.append(template_warn_message({message: 'Your are leave the channel' + user.channelname}))
+			.append(template_warn_message({message: 'You must use command /join'}));
+		$('#users').html("");
+		$('#nbOnline').html("0");
+		$('#channelName').text('Not connected');
+	});
+
 	// when a user Sign out
+	socket.on('logout', (user: any) => {
+		$('#' + user.id).remove();
+	});
+
 	socket.on('logout', (user: any) => {
 		$('#' + user.id).remove();
 	});

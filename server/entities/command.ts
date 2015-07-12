@@ -3,6 +3,7 @@
 import {Room} from './room';
 import {User} from './user';
 import {Commands} from './commands';
+import {SocketEvents} from './../controllers/socket/socket-events';
 
 export class Command {
 	io: any;
@@ -35,12 +36,22 @@ export class Command {
 		});
 
 		this.registerCommand('join', 'Join a Channel', (currentRoom: Room, user: User, args: string[]): string => {
-			//client.emit('logged', );
+			console.log(user.channelname);
+			if (args[0] && user.channelname == '') {
+				user.channelname = args.join(' ');
+				SocketEvents.login(this.rooms, user, client);
+			}
 			return '';
 		});
 
 		this.registerCommand('part', 'Leave a Channel', (currentRoom: Room, user: User, args: string[]): string => {
-			//client.emit('logged', );
+			if (!user) {
+				return '';
+			}
+
+			client.emit('leaveChannel', user);
+			SocketEvents.leaveChan(this.rooms, currentRoom.name, user, client, io);
+			console.log('Client: '+ user.username +' leave channel : ', currentRoom.name);
 			return '';
 		});
 
@@ -70,18 +81,18 @@ export class Command {
 		});
 	}
 
-	registerCommand(name: string, description: string, callback: any) {
+	public registerCommand(name: string, description: string, callback: any) {
 		this.commands[name] = new Commands(description, callback);
 	}
 
-	parseChat(currentRoom: Room, user: User, message: string): string {
+	public parseChat(currentRoom: Room, user: User, message: string): string {
 		if (message.indexOf('/') == 0) {
 			var args = message.substring(1).split(' ');
 			if (this.commands[args[0]]) {
 				message = this.commands[args[0]].callback(currentRoom, user, args.slice(1));
 			} else {
-				var error = 'unrecogised command: ' + message;
-				this.client.emit('unrecogised', user, error);
+				var error = 'unrecognized command: ' + message;
+				this.client.emit('unrecognized', user, error);
 				message = '';
 				console.log(error);
 			}
