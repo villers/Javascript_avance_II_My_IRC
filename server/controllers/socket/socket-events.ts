@@ -32,7 +32,7 @@ export class SocketEvents
 
 			client.on('sendMessage', (message: any) => {
 				_commands.rooms = _rooms;
-				message = _commands.parseChat(_rooms[_user.channelname], _user, message);
+				message = _commands.parseChat(_rooms[_user.channelname], _user, message).trim();
 				if (message !== '') {
 					io.in(_user.channelname).emit('recevMessage', _user.toJson(), message);
 				}
@@ -64,13 +64,12 @@ export class SocketEvents
 		console.log('user: ' + user.username + ' joined #' + user.channelname);
 
 		// envoi de l'utilisateur a tous les autres
-		client.broadcast.to(user.channelname).emit('newUser', user.toJson());
+		client.broadcast.to(user.channelname).emit('newUser', user.toJson(), 'other client');
 
 		// envois tous les utilisateurs a l'utilisateur courant
 		for (var k in rooms[user.channelname].users) {
-			client.emit('newUser', rooms[user.channelname].users[k].toJson());
+			client.emit('newUser', rooms[user.channelname].users[k].toJson(), 'local client');
 		}
-
 	}
 
 	static leaveChan(rooms: Room[], channelName: string, user: User, client, io) {

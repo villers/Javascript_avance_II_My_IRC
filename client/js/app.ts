@@ -40,7 +40,8 @@ socket.on('connect', () => {
 	});
 
 	// when a new user connected
-	socket.on('newUser', (user: any) => {
+	socket.on('newUser', (user: any, debug: string) => {
+		console.log(user, debug);
 		$('#users').append(template_chat(user));
 		$('#nbOnline').html(template_nbOnline({nbOnline: $('.user-row').length}));
 		if (user.username == _user.username) {

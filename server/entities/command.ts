@@ -17,9 +17,11 @@ export class Command {
 		this.client = client;
 
 		this.registerCommand('nick', 'Change nickname', (currentRoom: Room, user: User, args: string[]): string => {
-			user.username = args[0];
-			currentRoom.users[user.id].username = args[0];
-			io.in(currentRoom.name).emit('renameUser', user.toJson());
+			if (args[0] && user.channelname !== '') {
+				user.username = args[0];
+				currentRoom.users[user.id].username = args[0];
+				io.in(currentRoom.name).emit('renameUser', user.toJson());
+			}
 			return '';
 		});
 
@@ -56,20 +58,22 @@ export class Command {
 		});
 
 		this.registerCommand('users', 'List Users in channel', (currentRoom: Room, user: User, args: string[]): string => {
-			var result: any = [];
-			for (var usersId in currentRoom.users) {
-				var username = currentRoom.users[usersId].username;
-				if (args[0] === undefined || (args[0] && username.indexOf(args[0]) > -1)) {
-					result.push(username);
+			if (user.channelname !== '') {
+				var result:any = [];
+				for (var usersId in currentRoom.users) {
+					var username = currentRoom.users[usersId].username;
+					if (args[0] === undefined || (args[0] && username.indexOf(args[0]) > -1)) {
+						result.push(username);
+					}
 				}
-			}
 
-			client.emit('listOfUsers', result);
+				client.emit('listOfUsers', result);
+			}
 			return '';
 		});
 
 		this.registerCommand('msg', 'Send a private message', (currentRoom: Room, user: User, args: string[]): string => {
-			if (args[0]|| args[1]) {
+			if (args[0] && args[1] && user.channelname !== '') {
 				for (var usersId in currentRoom.users) {
 					if (currentRoom.users[usersId].username == args[0]) {
 						args.shift();
