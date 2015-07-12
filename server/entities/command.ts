@@ -58,7 +58,14 @@ export class Command {
 		});
 
 		this.registerCommand('msg', 'Send a private message', (currentRoom: Room, user: User, args: string[]): string => {
-			//client.emit('logged', );
+			if (args[0]|| args[1]) {
+				for (var usersId in currentRoom.users) {
+					if (currentRoom.users[usersId].username == args[0]) {
+						args.shift();
+						client.broadcast.to(usersId).emit('recevMessage', user, args.join(' '));
+					}
+				}
+			}
 			return '';
 		});
 	}

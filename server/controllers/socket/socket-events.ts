@@ -2,7 +2,7 @@
 
 // client.emit -> only me
 // client.broadcast.to(_channelName).emit ->  all in a channel without me
-// io.broadcast.to(socketid).emit -> One user with specific id
+// client.broadcast.to(socketid).emit -> One user with specific id
 // io.in(_channelName).emit -> all in a channel with me
 
 "use strict";

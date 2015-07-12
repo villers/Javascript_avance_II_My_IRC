@@ -43,6 +43,9 @@ socket.on('connect', () => {
 	socket.on('newUser', (user: any) => {
 		$('#users').append(template_chat(user));
 		$('#nbOnline').html(template_nbOnline({nbOnline: $('.user-row').length}));
+		if (user.username == _user.username) {
+			$('#' + user.id).addClass('active');
+		}
 	});
 
 	// when a new message received
