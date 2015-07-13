@@ -40,9 +40,18 @@ gulp.task('browser_sync', function()
 	return browserSync.reload();
 });
 
-gulp.task('watch', ['ts', 'style', 'browser_sync'], function()
+gulp.task('watchSync', ['ts', 'style', 'browser_sync'], function()
 {
 	browserSync({proxy: "http://localhost:3333", reloadDelay: 1000});
+	var _watchable = [];
+	_watchable.push(_ts);
+	_watchable.push(_style);
+	return gulp.watch(_watchable, ['ts', 'style', 'browser_sync']);
+});
+
+gulp.task('watch', ['ts', 'style'], function()
+{
+	//browserSync({proxy: "http://localhost:3333", reloadDelay: 1000});
 	var _watchable = [];
 	_watchable.push(_ts);
 	_watchable.push(_style);

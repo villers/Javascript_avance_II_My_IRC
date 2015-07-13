@@ -14,6 +14,8 @@
 <body>
 <div class="container">
 
+	<h3 class="text-center">My Chat <span id="channelName"></span></h3>
+
 	<div class="row" id="login">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -24,10 +26,10 @@
 					<form role="form" id="doLogin">
 						<fieldset>
 							<div class="form-group">
-								<input class="form-control" placeholder="Username" name="username" id="username" type="text" autofocus>
+								<input class="form-control" placeholder="Username" name="username" id="username" type="text" autofocus required>
 							</div>
 							<div class="form-group">
-								<input class="form-control" placeholder="Channel" name="channel" id="channel" type="text">
+								<input class="form-control" placeholder="Channel" name="channel" id="channel" type="text" required>
 							</div>
 							<button class="btn btn-sm btn-success">Login</button>
 						</fieldset>
@@ -38,7 +40,6 @@
 	</div>
 
 	<div class="row" id="connected">
-		<h3 class="text-center">My Chat <span id="channelName"></span></h3>
 		<div class="col-md-8">
 			<div class="panel panel-info">
 				<div class="panel-heading">

@@ -27,9 +27,7 @@ export class SocketEvents
 				_user = new User(client.id, signInfos.username, signInfos.channelname);
 
 				// création de la room ou ajout de l'utilisateur dans la room
-				if (_user) {
-					SocketEvents.login(_rooms, _user, client);
-				}
+				SocketEvents.login(_rooms, _user, client);
 			});
 
 			client.on('sendMessage', (message: any) => {

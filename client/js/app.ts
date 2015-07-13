@@ -19,7 +19,7 @@ var template_chat = Handlebars.compile($("#user-template").html());
 var template_nbOnline = Handlebars.compile($('#nbOnline-template').html());
 
 // socket Connexion
-var socket = io.connect('http://localhost:3333');
+var socket = io.connect('http://127.0.0.1:3333');
 
 // Event Send Message
 var textbox = $('#textbox');
@@ -83,6 +83,7 @@ socket.on('connect', () => {
 		$('#name-' + user.id).text(user.username);
 	});
 
+	// when a user leave a channel
 	socket.on('leaveChannel', (user: any) => {
 		$('#messages')
 			.append(template_warn_message({message: 'Your are leave the channel' + user.channelname}))
