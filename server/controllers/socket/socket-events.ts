@@ -27,7 +27,9 @@ export class SocketEvents
 				_user = new User(client.id, signInfos.username, signInfos.channelname);
 
 				// création de la room ou ajout de l'utilisateur dans la room
-				SocketEvents.login(_rooms, _user, client);
+				if (_user) {
+					SocketEvents.login(_rooms, _user, client);
+				}
 			});
 
 			client.on('sendMessage', (message: any) => {
@@ -67,7 +69,9 @@ export class SocketEvents
 		client.broadcast.to(user.channelname).emit('newUser', user.toJson(), 'other client');
 
 		// envois tous les utilisateurs a l'utilisateur courant
+		console.log(rooms[user.channelname].users);
 		for (var k in rooms[user.channelname].users) {
+			console.log("send 1 client\n -----------------");
 			client.emit('newUser', rooms[user.channelname].users[k].toJson(), 'local client');
 		}
 	}

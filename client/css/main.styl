@@ -3,6 +3,8 @@ body
 
 .media-body
 	border-bottom solid 1px #F3F3F3
+	img
+		margin-bottom 3px
 
 .panel
 	margin-top 50px
@@ -13,10 +15,19 @@ body
 	overflow-x hidden
 
 #login
-	display block;
+	display block
 
 #connected
-	display none;
+	display none
 
 #users .active
 	color #FF0000
+
+.user
+	cursor pointer
+	padding 3px
+	transition all 0.2s ease
+	&:hover
+		background-color #e6e6e6
+		border-radius 5px
+		transition all 0.2s ease

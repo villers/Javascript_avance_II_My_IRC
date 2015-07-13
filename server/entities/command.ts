@@ -32,8 +32,7 @@ export class Command {
 					result.push(room);
 				}
 			}
-
-			client.emit('listOfChan', result);
+			client.emit('warn', 'List of channels: ' + result.join(', ')+'.');
 			return '';
 		});
 
@@ -67,7 +66,7 @@ export class Command {
 					}
 				}
 
-				client.emit('listOfUsers', result);
+				client.emit('warn', 'List of Users: ' + result.join(', ')+'.');
 			}
 			return '';
 		});
