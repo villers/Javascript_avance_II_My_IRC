@@ -16,7 +16,7 @@ export class Command {
 		this.io = io;
 		this.client = client;
 
-		this.registerCommand('nick', 'Change nickname', (currentRoom: Room, user: User, args: string[]): string => {
+		this.registerCommand('nick', 'Change nickname. /nick _nickname_', (currentRoom: Room, user: User, args: string[]): string => {
 			if (args[0] && user.channelname !== '') {
 				user.username = args[0];
 				currentRoom.users[user.id].username = args[0];
@@ -25,18 +25,18 @@ export class Command {
 			return '';
 		});
 
-		this.registerCommand('list', 'List Channels', (currentRoom: Room, user: User, args: string[]): string => {
+		this.registerCommand('list', 'Lists the available channels on the server. Displays only the channels containing the "string" if this is specified. /list [string]', (currentRoom: Room, user: User, args: string[]): string => {
 			var result: any = [];
 			for (var room in this.rooms) {
 				if (args[0] === undefined || (args[0] && room.indexOf(args[0]) > -1)) {
-					result.push(room);
+					result.push('• ' + room);
 				}
 			}
-			client.emit('warn', 'List of channels: ' + result.join(', ')+'.');
+			client.emit('warn', 'List of channels:\n' + result.join('\n'));
 			return '';
 		});
 
-		this.registerCommand('join', 'Join a Channel', (currentRoom: Room, user: User, args: string[]): string => {
+		this.registerCommand('join', 'Join channel. /join _channel_', (currentRoom: Room, user: User, args: string[]): string => {
 			console.log(user.channelname);
 			if (args[0] && user.channelname == '') {
 				user.channelname = args.join(' ');
@@ -45,33 +45,34 @@ export class Command {
 			return '';
 		});
 
-		this.registerCommand('part', 'Leave a Channel', (currentRoom: Room, user: User, args: string[]): string => {
+		this.registerCommand('part', 'Leave channel. /part _channel_', (currentRoom: Room, user: User, args: string[]): string => {
 			if (!user) {
 				return '';
 			}
 
-			client.emit('leaveChannel', user);
+			var message = 'Your are leave the channel ' + user.channelname + '.\nYou must use command /join';
+			client.emit('leaveChannel', message);
 			SocketEvents.leaveChan(this.rooms, currentRoom.name, user, client, io);
 			console.log('Client: '+ user.username +' leave channel : ', currentRoom.name);
 			return '';
 		});
 
-		this.registerCommand('users', 'List Users in channel', (currentRoom: Room, user: User, args: string[]): string => {
+		this.registerCommand('users', 'List users connected to the channel. /users', (currentRoom: Room, user: User, args: string[]): string => {
 			if (user.channelname !== '') {
 				var result:any = [];
 				for (var usersId in currentRoom.users) {
 					var username = currentRoom.users[usersId].username;
 					if (args[0] === undefined || (args[0] && username.indexOf(args[0]) > -1)) {
-						result.push(username);
+						result.push('• ' + username);
 					}
 				}
 
-				client.emit('warn', 'List of Users: ' + result.join(', ')+'.');
+				client.emit('warn', 'List of Users:\n' + result.join('\n'));
 			}
 			return '';
 		});
 
-		this.registerCommand('msg', 'Send a private message', (currentRoom: Room, user: User, args: string[]): string => {
+		this.registerCommand('msg', 'Sends a message to a specific user. /msg _nickname_ _message_', (currentRoom: Room, user: User, args: string[]): string => {
 			if (args[0] && args[1] && user.channelname !== '') {
 				for (var usersId in currentRoom.users) {
 					if (currentRoom.users[usersId].username == args[0]) {
@@ -80,6 +81,17 @@ export class Command {
 					}
 				}
 			}
+			return '';
+		});
+
+		this.registerCommand('help', 'List all commands. /help', (currentRoom: Room, user: User, args: string[]): string => {
+			var result = [];
+
+			for (var name in this.commands) {
+				result.push('• ' + name + ': '+ this.commands[name].description);
+			}
+
+			client.emit('warn', 'List of commands:\n' + result.join('\n'));
 			return '';
 		});
 	}
@@ -94,8 +106,8 @@ export class Command {
 			if (this.commands[args[0]]) {
 				message = this.commands[args[0]].callback(currentRoom, user, args.slice(1));
 			} else {
-				var error = 'unrecognized command: ' + message;
-				this.client.emit('unrecognized', user, error);
+				var error = 'unrecognized command: ' + message + '.\n You can type /help';
+				this.client.emit('warn', error);
 				message = '';
 				console.log(error);
 			}

@@ -1,31 +1,43 @@
 /// <reference path="../../server/all.d.ts" />
 
-var parse = (text: string): string => {
-	var emoticones = [
-		['O:\\)', 'angel.png'],
-		['3:\\)', 'devil.png'],
-		['O.o', 'confused.png'],
-		[':&#x27;\\(', 'cry.png'],
-		[':\\(', 'frown.png'],
-		[':o', 'gasp.png'],
-		['8\\|', 'glasses.png'],
-		[':D', 'grin.png'],
-		['&gt;:-\\(', 'grumpy.png'],
-		['&lt;3', 'heart.png'],
-		['\\^_\\^', 'kiki.png'],
-		[':\\*', 'kiss.png'],
-		[':v', 'pacman.png'],
-		[':\\)', 'smile.png'],
-		['-_-', 'squint.png'],
-		['8\\)', 'sunglasses.png'],
-		[':P', 'tongue.png'],
-		[':\\|', 'unsure.png'],
-		['&gt;&lt;', 'upset.png'],
-	];
+var parse = (text: string, emote: boolean = true, char: boolean= true): string => {
 	text = Handlebars.Utils.escapeExpression(text);
-	for(var i = 0; i < emoticones.length; i++){
-		var template_img = Handlebars.compile('<img src="img/smiley/' + emoticones[i][1] + '">');
-		text = text.replace(new RegExp(emoticones[i][0], 'gi'), template_img);
+	if (emote) {
+		var emoticones = [
+			['O:\\)', 'angel.png'],
+			['3:\\)', 'devil.png'],
+			['O\\.o', 'confused.png'],
+			[':&#x27;\\(', 'cry.png'],
+			[':\\(', 'frown.png'],
+			[':o', 'gasp.png'],
+			['8\\|', 'glasses.png'],
+			[':D', 'grin.png'],
+			['&gt;:-\\(', 'grumpy.png'],
+			['&lt;3', 'heart.png'],
+			['\\^_\\^', 'kiki.png'],
+			[':\\*', 'kiss.png'],
+			[':v', 'pacman.png'],
+			[':\\)', 'smile.png'],
+			['-_-', 'squint.png'],
+			['8\\)', 'sunglasses.png'],
+			[':P', 'tongue.png'],
+			[':\\|', 'unsure.png'],
+			['&gt;&lt;', 'upset.png'],
+		];
+		for(var i = 0; i < emoticones.length; i++){
+			var template_img = Handlebars.compile('<img src="img/smiley/' + emoticones[i][1] + '">');
+			text = text.replace(new RegExp(emoticones[i][0], 'gi'), template_img);
+		}
+	}
+
+	if (char) {
+		var specialChar = [
+			['\\n', '<br>'],
+		];
+		for(var i = 0; i < specialChar.length; i++){
+			var template_text = Handlebars.compile(specialChar[i][1]);
+			text = text.replace(new RegExp(specialChar[i][0], 'gi'), template_text);
+		}
 	}
 	return text;
 };
@@ -84,6 +96,7 @@ socket.on('connect', () => {
 		$('#login').hide();
 		$('#connected').show();
 		$('#channelName').text('#' + user.channelname);
+		textbox.focus();
 	});
 
 	// when a new user connected
@@ -106,7 +119,7 @@ socket.on('connect', () => {
 
 	// when a error message received
 	socket.on('warn', (message: string) => {
-		$('#messages').append(template_warn_message({message: message}));
+		$('#messages').append(template_warn_message({message: new Handlebars.SafeString(parse(message, false, true))}));
 		scrollBottom($('#scroll-message'));
 	});
 
@@ -116,10 +129,9 @@ socket.on('connect', () => {
 	});
 
 	// when a user leave a channel
-	socket.on('leaveChannel', (user: any) => {
+	socket.on('leaveChannel', (message: any) => {
 		$('#messages')
-			.append(template_warn_message({message: 'Your are leave the channel' + user.channelname}))
-			.append(template_warn_message({message: 'You must use command /join'}));
+			.append(template_warn_message({message: new Handlebars.SafeString(parse(message))}));
 		$('#users').html("");
 		$('#nbOnline').html(template_nbOnline({nbOnline: 0}));
 		$('#channelName').text('Not connected');
