@@ -14,7 +14,7 @@
 <body>
 <div class="container">
 
-	<h3 class="text-center">My Chat <span id="channelName"></span></h3>
+	<h3 class="text-center title">My Chat <span id="channelName"></span></h3>
 
 	<div class="row" id="login">
 		<div class="modal-dialog">
@@ -45,15 +45,37 @@
 				<div class="panel-heading">
 					RECENT CHAT HISTORY
 				</div>
-				<div class="panel-body">
+				<div class="panel-body" id="scroll-message">
 					<ul class="media-list" id="messages"></ul>
 				</div>
 				<div class="panel-footer">
 					<div class="input-group">
 						<input type="text" id="textbox" class="form-control" placeholder="Enter Message" autofocus>
-							<span class="input-group-btn">
-								<button class="btn btn-info" type="button" id="send">SEND</button>
-							</span>
+						<span class="input-group-btn">
+							<button class="btn btn-info" type="button" id="send">SEND</button>
+							<button class="btn btn-info" type="button" id="smiley"><img class="smiley" src="img/chat-smiles.png" alt=""/></button>
+						</span>
+					</div>
+					<div class="listsmiley" id="listsmiley">
+						<img src="img/smiley/angel.png" alt="O:)" />
+						<img src="img/smiley/devil.png" alt="3:)" />
+						<img src="img/smiley/confused.png" alt="O.o" />
+						<img src="img/smiley/cry.png" alt=":'(" />
+						<img src="img/smiley/frown.png" alt=":(" />
+						<img src="img/smiley/gasp.png" alt=":o" />
+						<img src="img/smiley/glasses.png" alt="8|" />
+						<img src="img/smiley/grin.png" alt=":D" />
+						<img src="img/smiley/grumpy.png" alt=">:-(" />
+						<img src="img/smiley/heart.png" alt="<3" />
+						<img src="img/smiley/kiki.png" alt="^_^" />
+						<img src="img/smiley/kiss.png" alt=":*" />
+						<img src="img/smiley/pacman.png" alt=":v" />
+						<img src="img/smiley/smile.png" alt=":)" />
+						<img src="img/smiley/squint.png" alt="-_-" />
+						<img src="img/smiley/sunglasses.png" alt="8)" />
+						<img src="img/smiley/tongue.png" alt=":P" />
+						<img src="img/smiley/unsure.png" alt=":|" />
+						<img src="img/smiley/upset.png" alt="><" />
 					</div>
 				</div>
 			</div>

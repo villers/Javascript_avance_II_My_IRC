@@ -2,8 +2,25 @@
 
 var parse = (text: string): string => {
 	var emoticones = [
-		[':\\\)', 'smile.png'],
-		[':\\\(', 'frown.png']
+		['O:\\)', 'angel.png'],
+		['3:\\)', 'devil.png'],
+		['O.o', 'confused.png'],
+		[':&#x27;\\(', 'cry.png'],
+		[':\\(', 'frown.png'],
+		[':o', 'gasp.png'],
+		['8\\|', 'glasses.png'],
+		[':D', 'grin.png'],
+		['&gt;:-\\(', 'grumpy.png'],
+		['&lt;3', 'heart.png'],
+		['\\^_\\^', 'kiki.png'],
+		[':\\*', 'kiss.png'],
+		[':v', 'pacman.png'],
+		[':\\)', 'smile.png'],
+		['-_-', 'squint.png'],
+		['8\\)', 'sunglasses.png'],
+		[':P', 'tongue.png'],
+		[':\\|', 'unsure.png'],
+		['&gt;&lt;', 'upset.png'],
 	];
 	text = Handlebars.Utils.escapeExpression(text);
 	for(var i = 0; i < emoticones.length; i++){
@@ -11,6 +28,10 @@ var parse = (text: string): string => {
 		text = text.replace(new RegExp(emoticones[i][0], 'gi'), template_img);
 	}
 	return text;
+};
+
+var scrollBottom = (element: JQuery) => {
+	element.animate({"scrollTop": element[0].scrollHeight}, "slow");
 };
 
 var template_message = Handlebars.compile($("#message-template").html());
@@ -39,6 +60,14 @@ $("body").on("click", ".user", (element: any) => {
 	textbox.focus();
 });
 
+$('#smiley').click(() => {
+	$('#listsmiley').toggle();
+});
+
+$('#listsmiley img').click((element: any) => {
+	textbox.val(textbox.val() + element.currentTarget.alt);
+});
+
 // connection
 var doLogin = $('#doLogin');
 doLogin.on('submit', (e: any) => {
@@ -59,6 +88,7 @@ socket.on('connect', () => {
 
 	// when a new user connected
 	// TODO: check this fucking bugs
+	// i think its nodemon
 	socket.on('newUser', (user: any, debug: string) => {
 		console.log(user, debug);
 		$('#users').append(template_chat(user));
@@ -71,16 +101,18 @@ socket.on('connect', () => {
 	// when a new message received
 	socket.on('recevMessage', (user: any, message: string) => {
 		$('#messages').append(template_message({username: user.username, message: new Handlebars.SafeString(parse(message))}));
+		scrollBottom($('#scroll-message'));
 	});
 
 	// when a error message received
 	socket.on('warn', (message: string) => {
 		$('#messages').append(template_warn_message({message: message}));
+		scrollBottom($('#scroll-message'));
 	});
 
 	// when a user has renamed
 	socket.on('renameUser', (user: any) => {
-		$('#name-' + user.id).text(user.username);
+		$('#' + user.id).text(user.username);
 	});
 
 	// when a user leave a channel
@@ -91,6 +123,7 @@ socket.on('connect', () => {
 		$('#users').html("");
 		$('#nbOnline').html(template_nbOnline({nbOnline: 0}));
 		$('#channelName').text('Not connected');
+		scrollBottom($('#scroll-message'));
 	});
 
 	// when a user Sign out
