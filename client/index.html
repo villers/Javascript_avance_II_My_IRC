@@ -13,129 +13,128 @@
 </head>
 
 <body ng-app="irc">
-<div class="container" ng-controller="MainCtrl as mainCtrl">
+	<div class="container" ng-controller="MainCtrl">
 
-	<h3 class="text-center title">My Chat</h3>
+		<h3 class="text-center title">My Chat</h3>
 
-	<div class="row" id="login" ng-show="!mainCtrl.logged">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="panel-heading">
-					<h3 class="panel-title">Log In</h3>
-				</div>
-				<div class="panel-body">
-					<form id="doLogin" ng-submit="mainCtrl.doLogin()">
-						<fieldset>
-							<div class="form-group">
-								<input class="form-control" placeholder="Username" name="username" ng-model="mainCtrl.login.username" type="text" autofocus required>
-							</div>
-							<div class="form-group">
-								<input class="form-control" placeholder="Channel" name="channel" ng-model="mainCtrl.login.channel"  type="text" required>
-							</div>
-							<button class="btn btn-sm btn-success">Login</button>
-						</fieldset>
-					</form>
+		<div class="row" id="login" ng-show="!logged">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="panel-heading">
+						<h3 class="panel-title">Log In</h3>
+					</div>
+					<div class="panel-body">
+						<form id="doLogin" ng-submit="doLogin()">
+							<fieldset>
+								<div class="form-group">
+									<input class="form-control" placeholder="Username" name="username" ng-model="login.username" type="text" autofocus required>
+								</div>
+								<div class="form-group">
+									<input class="form-control" placeholder="Channel" name="channel" ng-model="login.channel"  type="text" required>
+								</div>
+								<button class="btn btn-sm btn-success">Login</button>
+							</fieldset>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="row" id="connected" ng-show="mainCtrl.logged">
-		<div class="col-md-8">
-			{{mainCtrl.channels}}
-			<ul class="nav nav-tabs">
-				<li ng-repeat="(key, chan) in mainCtrl.channels" class="active" ng-class="{active: active}">
-					<a href="" ng-click="mainCtrl.selectChan(key)">{{chan.name}}</a>
-				</li>
-			</ul>
-			<div class="tab-content">
-				<div class="panel panel-info">
-					<div class="panel-body" id="scroll-message">
-						<ul class="media-list" id="messages">{{mainCtrl.selectedChan}}</ul>
+		<div class="row" id="connected" ng-show="logged">
+			<div class="col-md-8">
+				<ul class="nav nav-tabs">
+					<li ng-repeat="(key, chan) in channels" class="active" ng-class="{active: active}">
+						<a href="" ng-click="selectChan(chan)">{{chan.name}}</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="panel panel-info">
+						<div class="panel-body" id="scroll-message">
+							<ul class="media-list" id="messages">{{channelSelected}}</ul>
+						</div>
+						<div class="panel-footer">
+							<div class="input-group">
+								<input type="text" id="textbox" class="form-control" placeholder="Enter Message">
+								<span class="input-group-btn">
+									<button class="btn btn-info" type="button" id="send">SEND</button>
+									<button class="btn btn-info" type="button" id="smiley"><img class="smiley" src="img/chat-smiles.png" alt=""></button>
+								</span>
+							</div>
+							<div class="listsmiley" id="listsmiley">
+								<img src="img/smiley/angel.png" alt="O:)">
+								<img src="img/smiley/devil.png" alt="3:)">
+								<img src="img/smiley/confused.png" alt="O.o">
+								<img src="img/smiley/cry.png" alt=":'(">
+								<img src="img/smiley/frown.png" alt=":(">
+								<img src="img/smiley/gasp.png" alt=":o">
+								<img src="img/smiley/glasses.png" alt="8|">
+								<img src="img/smiley/grin.png" alt=":D">
+								<img src="img/smiley/grumpy.png" alt=">:-(">
+								<img src="img/smiley/heart.png" alt="<3">
+								<img src="img/smiley/kiki.png" alt="^_^">
+								<img src="img/smiley/kiss.png" alt=":*">
+								<img src="img/smiley/pacman.png" alt=":v">
+								<img src="img/smiley/smile.png" alt=":)">
+								<img src="img/smiley/squint.png" alt="-_-">
+								<img src="img/smiley/sunglasses.png" alt="8)">
+								<img src="img/smiley/tongue.png" alt=":P">
+								<img src="img/smiley/unsure.png" alt=":|">
+								<img src="img/smiley/upset.png" alt="><">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						ONLINE USERS
+					</div>
+					<div class="panel-body">
+						<ul class="media-list" id="users">
+							<li ng-repeat="user in channel.users" class="media animated fadeInLeftBig user">{{user.username}}</li>
+						</ul>
 					</div>
 					<div class="panel-footer">
-						<div class="input-group">
-							<input type="text" id="textbox" class="form-control" placeholder="Enter Message">
-							<span class="input-group-btn">
-								<button class="btn btn-info" type="button" id="send">SEND</button>
-								<button class="btn btn-info" type="button" id="smiley"><img class="smiley" src="img/chat-smiles.png" alt=""></button>
-							</span>
-						</div>
-						<div class="listsmiley" id="listsmiley">
-							<img src="img/smiley/angel.png" alt="O:)">
-							<img src="img/smiley/devil.png" alt="3:)">
-							<img src="img/smiley/confused.png" alt="O.o">
-							<img src="img/smiley/cry.png" alt=":'(">
-							<img src="img/smiley/frown.png" alt=":(">
-							<img src="img/smiley/gasp.png" alt=":o">
-							<img src="img/smiley/glasses.png" alt="8|">
-							<img src="img/smiley/grin.png" alt=":D">
-							<img src="img/smiley/grumpy.png" alt=">:-(">
-							<img src="img/smiley/heart.png" alt="<3">
-							<img src="img/smiley/kiki.png" alt="^_^">
-							<img src="img/smiley/kiss.png" alt=":*">
-							<img src="img/smiley/pacman.png" alt=":v">
-							<img src="img/smiley/smile.png" alt=":)">
-							<img src="img/smiley/squint.png" alt="-_-">
-							<img src="img/smiley/sunglasses.png" alt="8)">
-							<img src="img/smiley/tongue.png" alt=":P">
-							<img src="img/smiley/unsure.png" alt=":|">
-							<img src="img/smiley/upset.png" alt="><">
-						</div>
+						Online: <span class="animated flash">{{channel.users.length}}</span>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="col-md-4">
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					ONLINE USERS
-				</div>
-				<div class="panel-body">
-					<ul class="media-list" id="users">
-						<li ng-repeat="user in channel.users" class="media animated fadeInLeftBig user">{{user.username}}</li>
-					</ul>
-				</div>
-				<div class="panel-footer">
-					Online: <span class="animated flash">{{channel.users.length}}</span>
-				</div>
-			</div>
-		</div>
 	</div>
-</div>
 
-<script id="message-template" type="text/x-handlebars-template">
-	<li class="media animated bounceInLeft">
-		<div class="media-body">
-			<div class="media">
-				<div class="media-body">
-					<b>{{username}}:</b> {{message}}
+	<script id="message-template" type="text/x-handlebars-template">
+		<li class="media animated bounceInLeft">
+			<div class="media-body">
+				<div class="media">
+					<div class="media-body">
+						<b>{{username}}:</b> {{message}}
+					</div>
 				</div>
 			</div>
-		</div>
-	</li>
-</script>
+		</li>
+	</script>
 
-<script id="warn-message-template" type="text/x-handlebars-template">
-	<li class="media animated bounceInLeft">
-		<small>{{message}}</small>
-	</li>
-</script>
-
+	<script id="warn-message-template" type="text/x-handlebars-template">
+		<li class="media animated bounceInLeft">
+			<small>{{message}}</small>
+		</li>
+	</script>
 
 
 
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
-<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-<script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-<script type="text/javascript" src="bower_components/ngstorage/ngStorage.min.js"></script>
 
-<script type="text/javascript" src="js/user.js"></script>
-<script type="text/javascript" src="js/login.js"></script>
-<script type="text/javascript" src="js/channel.js"></script>
-<script type="text/javascript" src="js/app2.js"></script>
+	<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+	<script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+	<script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+	<script type="text/javascript" src="bower_components/ngstorage/ngStorage.min.js"></script>
+
+	<script type="text/javascript" src="js/user.js"></script>
+	<script type="text/javascript" src="js/login.js"></script>
+	<script type="text/javascript" src="js/channel.js"></script>
+	<script type="text/javascript" src="js/app2.js"></script>
 </body>
 </html>
