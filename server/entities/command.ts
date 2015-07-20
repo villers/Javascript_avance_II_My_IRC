@@ -17,7 +17,7 @@ export class Command {
 		this.client = client;
 
 		this.registerCommand('nick', 'Change nickname. /nick _nickname_', (currentRoom: Room, user: User, args: string[]): string => {
-			if (args[0] && user.channelname !== '') {
+			if (args[0] && currentRoom) { // TODO
 				user.username = args[0];
 				currentRoom.users[user.id].username = args[0];
 				io.in(currentRoom.name).emit('renameUser', user.toJson());
@@ -38,9 +38,10 @@ export class Command {
 
 		this.registerCommand('join', 'Join channel. /join _channel_', (currentRoom: Room, user: User, args: string[]): string => {
 			console.log(user.channelname);
-			if (args[0] && user.channelname == '') {
-				user.channelname = args.join(' ');
-				SocketEvents.login(this.rooms, user, client);
+			if (args[0] && currentRoom) {
+				var channelName = args.join(' ');
+				user.channelname.push(channelName);
+				SocketEvents.login(this.rooms, user, channelName, client);
 			}
 			return '';
 		});
@@ -50,15 +51,18 @@ export class Command {
 				return '';
 			}
 
-			var message = 'Your are leave the channel ' + user.channelname + '.\nYou must use command /join';
-			client.emit('leaveChannel', message);
-			SocketEvents.leaveChan(this.rooms, currentRoom.name, user, client, io);
-			console.log('Client: '+ user.username +' leave channel : ', currentRoom.name);
+			if (args[0] && currentRoom) {
+				var channelName = args.join(' ');
+				var message = 'Your are leave the channel ' + channelName + '.\nYou must use command /join';
+				client.emit('leaveChannel', message);
+				SocketEvents.leaveChan(this.rooms, channelName, user, client, io);
+				console.log('Client: '+ user.username +' leave channel : ', channelName);
+			}
 			return '';
 		});
 
 		this.registerCommand('users', 'List users connected to the channel. /users', (currentRoom: Room, user: User, args: string[]): string => {
-			if (user.channelname !== '') {
+			if (currentRoom) {
 				var result:any = [];
 				for (var usersId in currentRoom.users) {
 					var username = currentRoom.users[usersId].username;
@@ -73,7 +77,7 @@ export class Command {
 		});
 
 		this.registerCommand('msg', 'Sends a message to a specific user. /msg _nickname_ _message_', (currentRoom: Room, user: User, args: string[]): string => {
-			if (args[0] && args[1] && user.channelname !== '') {
+			if (args[0] && args[1] && currentRoom) {
 				for (var usersId in currentRoom.users) {
 					if (currentRoom.users[usersId].username == args[0]) {
 						args.shift();

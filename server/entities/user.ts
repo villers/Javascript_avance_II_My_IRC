@@ -2,12 +2,12 @@
 export class User{
 	id:string;
 	username:string;
-	channelname: string;
+	channelname: string[];
 
 	constructor(id: string,username: string, channelname: string) {
 		this.id = id;
 		this.username = username;
-		this.channelname = channelname;
+		this.channelname = [channelname];
 	}
 
 	toJson(): Object {
