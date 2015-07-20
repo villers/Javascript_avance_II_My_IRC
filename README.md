@@ -2,7 +2,7 @@
 
 > Javascript_avance_II_My_IRC:
 
-## Run followings commands
+## Run the following commands
 ```
 npm install tsc -g
 npm install
