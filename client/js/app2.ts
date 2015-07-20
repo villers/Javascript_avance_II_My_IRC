@@ -3,27 +3,6 @@
 module irc {
 	'use strict';
 
-	export class Login {
-		username: string;
-		channel: string;
-	}
-
-	export class Channel {
-		constructor(name: string, user: User) {
-			this.name = name;
-			this.users = [user];
-		}
-
-		name: string;
-		users: User[];
-	}
-
-	export class User {
-		id: string;
-		username: string;
-		channelname: string;
-	}
-
 	export class MainCtrl {
 		static $inject = [];
 
@@ -32,13 +11,15 @@ module irc {
 		public login: Login;
 
 		public channels: Channel[];
+		public selectedChan: Channel;
 
 		public constructor() {
 			this.socket = io.connect('http://127.0.0.1:3333');
-			this.channels = [];
 			this.socket.on('connect', () => {
 				this.socket.on('logged', (user: User) => {
+					this.channels = [];
 					this.channels.push(new Channel(this.login.channel, user));
+					console.log(this.channels)
 				});
 
 				this.socket.on('newUser', (user: any, channelName: string, debug: string) => {
@@ -56,6 +37,10 @@ module irc {
 		public doLogin() {
 			this.socket.emit('login', {username: this.login.username, channelname: this.login.channel});
 			this.logged = true;
+		}
+
+		public selectChan(key: number) {
+			this.selectedChan = this.channels[key];
 		}
 
 

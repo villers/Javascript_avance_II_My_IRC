@@ -13,5 +13,7 @@ declare var io: any;
 /// <reference path="entities/command.ts" />
 /// <reference path="controllers/socket/socket-events.ts" />
 /// <reference path="controllers/static/static-dispatcher.ts" />
-/// <reference path="../client/js/app.ts" />
 /// <reference path="../client/js/app2.ts" />
+/// <reference path="../client/js/channel.ts" />
+/// <reference path="../client/js/login.ts" />
+/// <reference path="../client/js/user.ts" />

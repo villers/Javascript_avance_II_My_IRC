@@ -17,7 +17,7 @@
 
 	<h3 class="text-center title">My Chat</h3>
 
-	<div class="row" id="login" ng-if="!mainCtrl.logged">
+	<div class="row" id="login" ng-show="!mainCtrl.logged">
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="panel-heading">
@@ -40,47 +40,51 @@
 		</div>
 	</div>
 
-	<div class="row" id="connected" ng-if="mainCtrl.logged">
+	<div class="row" id="connected" ng-show="mainCtrl.logged">
 		<div class="col-md-8">
-			<tabset>
-				<tab ng-repeat="channel in mainCtrl.channels" heading="{{channel.name}}">
-					<div class="panel panel-info">
-						<div class="panel-body" id="scroll-message">
-							<ul class="media-list" id="messages"></ul>
+			{{mainCtrl.channels}}
+			<ul class="nav nav-tabs">
+				<li ng-repeat="(key, chan) in mainCtrl.channels" class="active" ng-class="{active: active}">
+					<a href="" ng-click="mainCtrl.selectChan(key)">{{chan.name}}</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="panel panel-info">
+					<div class="panel-body" id="scroll-message">
+						<ul class="media-list" id="messages">{{mainCtrl.selectedChan}}</ul>
+					</div>
+					<div class="panel-footer">
+						<div class="input-group">
+							<input type="text" id="textbox" class="form-control" placeholder="Enter Message">
+							<span class="input-group-btn">
+								<button class="btn btn-info" type="button" id="send">SEND</button>
+								<button class="btn btn-info" type="button" id="smiley"><img class="smiley" src="img/chat-smiles.png" alt=""></button>
+							</span>
 						</div>
-						<div class="panel-footer">
-							<div class="input-group">
-								<input type="text" id="textbox" class="form-control" placeholder="Enter Message">
-						<span class="input-group-btn">
-							<button class="btn btn-info" type="button" id="send">SEND</button>
-							<button class="btn btn-info" type="button" id="smiley"><img class="smiley" src="img/chat-smiles.png" alt=""/></button>
-						</span>
-							</div>
-							<div class="listsmiley" id="listsmiley">
-								<img src="img/smiley/angel.png" alt="O:)" />
-								<img src="img/smiley/devil.png" alt="3:)" />
-								<img src="img/smiley/confused.png" alt="O.o" />
-								<img src="img/smiley/cry.png" alt=":'(" />
-								<img src="img/smiley/frown.png" alt=":(" />
-								<img src="img/smiley/gasp.png" alt=":o" />
-								<img src="img/smiley/glasses.png" alt="8|" />
-								<img src="img/smiley/grin.png" alt=":D" />
-								<img src="img/smiley/grumpy.png" alt=">:-(" />
-								<img src="img/smiley/heart.png" alt="<3" />
-								<img src="img/smiley/kiki.png" alt="^_^" />
-								<img src="img/smiley/kiss.png" alt=":*" />
-								<img src="img/smiley/pacman.png" alt=":v" />
-								<img src="img/smiley/smile.png" alt=":)" />
-								<img src="img/smiley/squint.png" alt="-_-" />
-								<img src="img/smiley/sunglasses.png" alt="8)" />
-								<img src="img/smiley/tongue.png" alt=":P" />
-								<img src="img/smiley/unsure.png" alt=":|" />
-								<img src="img/smiley/upset.png" alt="><" />
-							</div>
+						<div class="listsmiley" id="listsmiley">
+							<img src="img/smiley/angel.png" alt="O:)">
+							<img src="img/smiley/devil.png" alt="3:)">
+							<img src="img/smiley/confused.png" alt="O.o">
+							<img src="img/smiley/cry.png" alt=":'(">
+							<img src="img/smiley/frown.png" alt=":(">
+							<img src="img/smiley/gasp.png" alt=":o">
+							<img src="img/smiley/glasses.png" alt="8|">
+							<img src="img/smiley/grin.png" alt=":D">
+							<img src="img/smiley/grumpy.png" alt=">:-(">
+							<img src="img/smiley/heart.png" alt="<3">
+							<img src="img/smiley/kiki.png" alt="^_^">
+							<img src="img/smiley/kiss.png" alt=":*">
+							<img src="img/smiley/pacman.png" alt=":v">
+							<img src="img/smiley/smile.png" alt=":)">
+							<img src="img/smiley/squint.png" alt="-_-">
+							<img src="img/smiley/sunglasses.png" alt="8)">
+							<img src="img/smiley/tongue.png" alt=":P">
+							<img src="img/smiley/unsure.png" alt=":|">
+							<img src="img/smiley/upset.png" alt="><">
 						</div>
 					</div>
-				</tab>
-			</tabset>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-4">
 			<div class="panel panel-primary">
@@ -129,6 +133,9 @@
 <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="bower_components/ngstorage/ngStorage.min.js"></script>
 
+<script type="text/javascript" src="js/user.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<script type="text/javascript" src="js/channel.js"></script>
 <script type="text/javascript" src="js/app2.js"></script>
 </body>
 </html>
