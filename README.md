@@ -2,13 +2,13 @@
 
 > Javascript_avance_II_My_IRC:
 
-## Run followings commands
+## Run the followings commands
 ```
 npm install tsc -g
 npm install
 bower install
 gulp
-gulp serve
+node index.js
 ```
 
 #LICENSE

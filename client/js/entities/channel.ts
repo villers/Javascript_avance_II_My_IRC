@@ -1,4 +1,4 @@
-/// <reference path="../../server/all.d.ts" />
+/// <reference path="../../../server/all.d.ts" />
 
 module irc {
 	'use strict';

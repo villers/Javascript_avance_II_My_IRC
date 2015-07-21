@@ -80,8 +80,8 @@ export class Command {
 				for (var usersId in currentRoom.users) {
 					if (currentRoom.users[usersId].username == args[0]) {
 						args.shift();
-						client.broadcast.to(usersId).emit('sendMessage', user, currentRoom.name, args.join(' '), false);
-						client.emit('sendMessage', user, currentRoom.name, currentRoom.users[usersId].username  + ' -> ' + args.join(' '), false);
+						client.broadcast.to(usersId).emit('sendMessage', user, currentRoom.name, 'From ' + currentRoom.users[usersId].username  + ' -> ' + args.join(' '), false);
+						client.emit('sendMessage', user, currentRoom.name, 'To ' + currentRoom.users[usersId].username  + ' -> ' + args.join(' '), false);
 					}
 				}
 			}

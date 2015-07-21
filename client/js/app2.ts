@@ -9,9 +9,11 @@ module irc {
 		channels: IChannels<Channel>; // Channel[]
 		channelSelected: Channel;
 		text: string;
+		emotes: any;
 
 		doLogin(): void;
 		selectChan(channel: Channel): void;
+		addText(input: string): void;
 		equals(arg1: any, arg2: any): boolean;
 		send():void;
 	}
@@ -24,8 +26,10 @@ module irc {
 		public constructor($scope: IMyScope) {
 			this.socket = io.connect('http://127.0.0.1:3333');
 			$scope.channels = {};
+			$scope.text = '';
 			$scope.logged = false;
 			$scope.login = new Login();
+			$scope.emotes = Parse.emoticones;
 
 			this.socket.on('connect', () => {
 				this.socket.on('logged', (user: User, channelName: string) => {
@@ -33,6 +37,7 @@ module irc {
 					$scope.channels[channelName] = new Channel(channelName, user);
 					$scope.channelSelected = $scope.channels[channelName];
 					$scope.$apply();
+					$('#text')[0].focus();
 				});
 
 				this.socket.on('newUser', (user: User, channelName: string, debug: string) => {
@@ -91,6 +96,11 @@ module irc {
 				$scope.channelSelected = channel;
 			};
 
+			$scope.addText = (input: string) => {
+				$scope.text += input;
+				$('#text')[0].focus();
+			};
+
 			$scope.equals = (arg1: any, arg2: any) => {
 				return angular.equals(arg1, arg2);
 			};
@@ -102,6 +112,7 @@ module irc {
 	}
 
 	angular.module('irc', ['ngSanitize', 'ngStorage', 'ui.bootstrap'])
-		.controller('MainCtrl', MainCtrl);
+		.controller('MainCtrl', MainCtrl)
+		.filter('parse', Parse.$inject);
 
 }
