@@ -11,9 +11,25 @@ module irc {
 		constructor(name:string, user:User) {
 			this.name = name;
 			this.users = [user];
+			this.messages = [];
 		}
 
 		name:string;
 		users:User[];
+		messages:Message[];
+
+		findUser(user): any {
+			return this.users.filter((element: User) => {
+				return (element.id == user.id);
+			});
+		}
+
+		deleteUser(user): any {
+			return this.users.forEach((element: User, index: number) => {
+				if (element.id == user.id) {
+					this.users.splice(index, 1);
+				}
+			});
+		}
 	}
 }

@@ -3,9 +3,9 @@
 module irc {
 	'use strict';
 
-	export class Login {
-		id: string;
-		username:string;
-		channel:string;
+	export class Message {
+		user: User;
+		str: string;
+		info: boolean;
 	}
 }

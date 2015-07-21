@@ -17,3 +17,4 @@ declare var io: any;
 /// <reference path="../client/js/channel.ts" />
 /// <reference path="../client/js/login.ts" />
 /// <reference path="../client/js/user.ts" />
+/// <reference path="../client/js/message.ts" />

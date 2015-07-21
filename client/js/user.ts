@@ -7,5 +7,6 @@ module irc {
 		id: string;
 		username: string;
 		channelname: string;
+		me: boolean;
 	}
 }

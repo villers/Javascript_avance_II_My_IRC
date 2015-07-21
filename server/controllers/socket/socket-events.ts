@@ -34,18 +34,19 @@ export class SocketEvents
 				_commands.rooms = _rooms;
 				message = _commands.parseChat(_rooms[channelName], _user, message).trim();
 				if (message !== '') {
-					console.log(channelName);
-					io.in(channelName).emit('recevMessage', _user.toJson(), message);
+					console.log(message, channelName);
+					io.in(channelName).emit('sendMessage', _user.toJson(), channelName, message, false);
 				}
 			});
 
-			client.on('disconnect', (channelName: string) => {
+			client.on('disconnect', () => {
 				if (!_user) {
 					return false;
 				}
 
-				SocketEvents.leaveChan(_rooms, channelName, _user, client, io);
-				console.log('Logout: ', _user.username);
+				_user.channelname.forEach((channelName: string) => {
+					SocketEvents.leaveChan(_rooms, channelName, _user, client, io);
+				});
 			})
 		});
 	}
@@ -61,7 +62,7 @@ export class SocketEvents
 		client.join(channelName);
 
 		// envoi d'un message a l'utilisateur pour dire que la connexion a réussi
-		client.emit('logged', user.toJson());
+		client.emit('logged', user.toJson(), channelName);
 		console.log('user: ' + user.username + ' joined #' + channelName);
 
 		// envoi de l'utilisateur a tous les autres
@@ -76,14 +77,15 @@ export class SocketEvents
 	}
 
 	static leaveChan(rooms: Room[], channelName: string, user: User, client, io) {
+		io.in(channelName).emit('logout', user.toJson(), channelName);
+		client.leave(channelName);
+		console.log('Logout: ', user.username, channelName);
+
 		if (rooms[channelName]) {
 			rooms[channelName].removeUser(user.id);
 			if (rooms[channelName].getNbUser() <= 0) {
 				delete rooms[channelName];
 			}
 		}
-
-		client.leave(channelName);
-		io.in(channelName).emit('logout', user.toJson());
 	}
 }

@@ -20,7 +20,7 @@ export class Command {
 			if (args[0] && currentRoom) { // TODO
 				user.username = args[0];
 				currentRoom.users[user.id].username = args[0];
-				io.in(currentRoom.name).emit('renameUser', user.toJson());
+				io.in(currentRoom.name).emit('renameUser', user.toJson(), currentRoom.name);
 			}
 			return '';
 		});
@@ -32,13 +32,12 @@ export class Command {
 					result.push('• ' + room);
 				}
 			}
-			client.emit('warn', 'List of channels:\n' + result.join('\n'));
+			client.emit('sendMessage', user, currentRoom.name, 'List of channels:\n' + result.join('\n'), true);
 			return '';
 		});
 
 		this.registerCommand('join', 'Join channel. /join _channel_', (currentRoom: Room, user: User, args: string[]): string => {
-			console.log(user.channelname);
-			if (args[0] && currentRoom) {
+			if (args[0]) {
 				var channelName = args.join(' ');
 				user.channelname.push(channelName);
 				SocketEvents.login(this.rooms, user, channelName, client);
@@ -54,7 +53,7 @@ export class Command {
 			if (args[0] && currentRoom) {
 				var channelName = args.join(' ');
 				var message = 'Your are leave the channel ' + channelName + '.\nYou must use command /join';
-				client.emit('leaveChannel', message);
+				client.emit('leaveChannel', message, channelName);
 				SocketEvents.leaveChan(this.rooms, channelName, user, client, io);
 				console.log('Client: '+ user.username +' leave channel : ', channelName);
 			}
@@ -71,7 +70,7 @@ export class Command {
 					}
 				}
 
-				client.emit('warn', 'List of Users:\n' + result.join('\n'));
+				client.emit('sendMessage', user, currentRoom.name, 'List of Users:\n' + result.join('\n'), true);
 			}
 			return '';
 		});
@@ -81,7 +80,8 @@ export class Command {
 				for (var usersId in currentRoom.users) {
 					if (currentRoom.users[usersId].username == args[0]) {
 						args.shift();
-						client.broadcast.to(usersId).emit('recevMessage', user, args.join(' '));
+						client.broadcast.to(usersId).emit('sendMessage', user, currentRoom.name, args.join(' '), false);
+						client.emit('sendMessage', user, currentRoom.name, currentRoom.users[usersId].username  + ' -> ' + args.join(' '), false);
 					}
 				}
 			}
@@ -95,7 +95,7 @@ export class Command {
 				result.push('• ' + name + ': '+ this.commands[name].description);
 			}
 
-			client.emit('warn', 'List of commands:\n' + result.join('\n'));
+			client.emit('sendMessage', user, currentRoom.name, 'List of commands:\n' + result.join('\n'), true);
 			return '';
 		});
 	}
@@ -111,7 +111,7 @@ export class Command {
 				message = this.commands[args[0]].callback(currentRoom, user, args.slice(1));
 			} else {
 				var error = 'unrecognized command: ' + message + '.\n You can type /help';
-				this.client.emit('warn', error);
+				this.client.emit('sendMessage', user, currentRoom.name, error, true);
 				message = '';
 				console.log(error);
 			}
