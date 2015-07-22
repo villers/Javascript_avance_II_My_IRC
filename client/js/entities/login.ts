@@ -5,13 +5,13 @@ module irc {
 
 	export class Login {
 		id: string;
-		username:string;
-		channel:string;
+		username: string;
+		channel: string;
 
 		constructor() {
 			this.id = '';
 			this.username = '';
-			this.channel = ''
+			this.channel = '';
 		}
 	}
 }

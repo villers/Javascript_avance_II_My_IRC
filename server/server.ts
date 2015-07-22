@@ -1,5 +1,5 @@
 /// <reference path="all.d.ts" />
-// https://github.com/tamaspiros/advanced-chat/blob/master/room.js
+
 'use strict';
 import {SocketEvents} from './controllers/socket/socket-events';
 import {StaticDispatcher} from './controllers/static/static-dispatcher';

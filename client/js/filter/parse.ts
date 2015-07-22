@@ -9,7 +9,8 @@ module irc {
 		static specialChar = [
 			['>', '&gt;'],
 			['<', '&lt;'],
-			['\\n', '<br>']
+			['\\n', '<br>'],
+			['((https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])', '<a href="$1">$1</a>']
 		];
 
 		static emoticones = [
@@ -31,18 +32,22 @@ module irc {
 			['8\\)', 'sunglasses.png', '8)'],
 			[':P', 'tongue.png', ':P'],
 			[':\\|', 'unsure.png', ':|'],
-			['&gt;&lt;', 'upset.png', '><'],
+			['&gt;&lt;', 'upset.png', '><']
 		];
 
 		static filterFactory() {
-			return (input: string):string => {
-				for(var i in Parse.specialChar){
-					input = input.replace(new RegExp(Parse.specialChar[i][0], 'gi'), Parse.specialChar[i][1]);
+			return (input: string): string => {
+				for (let i in Parse.specialChar) {
+					if (Parse.specialChar.hasOwnProperty(i)) {
+						input = input.replace(new RegExp(Parse.specialChar[i][0], 'gi'), Parse.specialChar[i][1]);
+					}
 				}
-				for(var i in Parse.emoticones){
-					input = input.replace(new RegExp(Parse.emoticones[i][0], 'gi'), '<img src="img/smiley/' + Parse.emoticones[i][1] + '">');
+				for (let i in Parse.emoticones) {
+					if (Parse.emoticones.hasOwnProperty(i)) {
+						input = input.replace(new RegExp(Parse.emoticones[i][0], 'gi'), '<img src="img/smiley/' + Parse.emoticones[i][1] + '">');
+					}
 				}
-				return input
+				return input;
 			}
 		}
 	}

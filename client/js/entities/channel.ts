@@ -8,25 +8,25 @@ module irc {
 	}
 
 	export class Channel {
-		constructor(name:string, user:User) {
+		constructor(name: string, user: User) {
 			this.name = name;
 			this.users = [user];
 			this.messages = [];
 		}
 
-		name:string;
-		users:User[];
-		messages:Message[];
+		name: string;
+		users: User[];
+		messages: Message[];
 
-		findUser(user): any {
+		findUser(user: User): any {
 			return this.users.filter((element: User) => {
-				return (element.id == user.id);
+				return (element.id === user.id);
 			});
 		}
 
-		deleteUser(user): any {
+		deleteUser(user: User): any {
 			return this.users.forEach((element: User, index: number) => {
-				if (element.id == user.id) {
+				if (element.id === user.id) {
 					this.users.splice(index, 1);
 				}
 			});

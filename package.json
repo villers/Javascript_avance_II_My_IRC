@@ -19,6 +19,7 @@
     "gulp-nodemon": "^2.0.3",
     "gulp-stylus": "^2.0.5",
     "gulp-tsc": "^0.10.1",
+    "gulp-tslint": "^2.0.0",
     "inherits": "^2.0.1",
     "process-nextick-args": "^1.0.1"
   },

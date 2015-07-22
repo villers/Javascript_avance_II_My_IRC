@@ -6,6 +6,7 @@ var browserSync = require('browser-sync');
 var typescript = require('gulp-tsc');
 var stylus = require('gulp-stylus');
 var nodemon = require('gulp-nodemon');
+var tslint = require('gulp-tslint');
 
 var CLIENT_DIR = './client/';
 
@@ -15,6 +16,12 @@ var _css = CLIENT_DIR + 'css/**/*.css';
 
 var _style = CLIENT_DIR + 'css/**/*.styl';
 var _ts = '**/*.ts';
+
+gulp.task('tslint', function(){
+	return gulp.src([_ts, '!node_modules/**', '!server/typings/**', '!server/all.d.ts'])
+		.pipe(tslint())
+		.pipe(tslint.report('prose', { emitError: false }));
+});
 
 gulp.task('ts', function(){
 	gulp.src([_ts, '!node_modules/**'])

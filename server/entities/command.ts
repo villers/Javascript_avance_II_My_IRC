@@ -17,9 +17,27 @@ export class Command {
 		this.client = client;
 
 		this.registerCommand('nick', 'Change nickname. /nick _nickname_', (currentRoom: Room, user: User, args: string[]): string => {
-			if (args[0] && currentRoom) { // TODO
-				user.username = args[0];
-				currentRoom.users[user.id].username = args[0];
+			if (args[0] && currentRoom) {
+				var username = args[0];
+
+				var nbUserWithSameName: number = 0;
+				for (let key in currentRoom.users) {
+					if (currentRoom.users.hasOwnProperty(key) && currentRoom.users[key].username === username) {
+						nbUserWithSameName++;
+						for (let key2 in currentRoom.users) {
+							if (currentRoom.users.hasOwnProperty(key2) && currentRoom.users[key2].username === username + nbUserWithSameName) {
+								nbUserWithSameName++;
+							}
+						}
+					}
+				}
+				if (nbUserWithSameName !== 0) {
+					client.emit('sendMessage', user, currentRoom.name, 'The username allready used\n', true);
+					return '';
+				}
+				io.in(currentRoom.name).emit('sendMessage', user, currentRoom.name, user.username + ' renamed ' + username + '.\n', true);
+				user.username = username;
+				currentRoom.users[user.id].username = username;
 				io.in(currentRoom.name).emit('renameUser', user.toJson(), currentRoom.name);
 			}
 			return '';
@@ -28,8 +46,10 @@ export class Command {
 		this.registerCommand('list', 'Lists the available channels on the server. Displays only the channels containing the "string" if this is specified. /list [string]', (currentRoom: Room, user: User, args: string[]): string => {
 			var result: any = [];
 			for (var room in this.rooms) {
-				if (args[0] === undefined || (args[0] && room.indexOf(args[0]) > -1)) {
-					result.push('• ' + room);
+				if (this.rooms.hasOwnProperty(room)) {
+					if (args[0] === undefined || (args[0] && room.indexOf(args[0]) > -1)) {
+						result.push('• ' + room);
+					}
 				}
 			}
 			client.emit('sendMessage', user, currentRoom.name, 'List of channels:\n' + result.join('\n'), true);
@@ -40,7 +60,7 @@ export class Command {
 			if (args[0]) {
 				var channelName = args.join(' ');
 				user.channelname.push(channelName);
-				SocketEvents.login(this.rooms, user, channelName, client);
+				SocketEvents.login(this.rooms, user, channelName, client, io);
 			}
 			return '';
 		});
@@ -55,18 +75,20 @@ export class Command {
 				var message = 'Your are leave the channel ' + channelName + '.\nYou must use command /join';
 				client.emit('leaveChannel', message, channelName);
 				SocketEvents.leaveChan(this.rooms, channelName, user, client, io);
-				console.log('Client: '+ user.username +' leave channel : ', channelName);
+				console.log('Client: ' + user.username + ' leave channel : ', channelName);
 			}
 			return '';
 		});
 
 		this.registerCommand('users', 'List users connected to the channel. /users', (currentRoom: Room, user: User, args: string[]): string => {
 			if (currentRoom) {
-				var result:any = [];
+				var result: any = [];
 				for (var usersId in currentRoom.users) {
-					var username = currentRoom.users[usersId].username;
-					if (args[0] === undefined || (args[0] && username.indexOf(args[0]) > -1)) {
-						result.push('• ' + username);
+					if (currentRoom.users.hasOwnProperty(usersId)) {
+						var username = currentRoom.users[usersId].username;
+						if (args[0] === undefined || (args[0] && username.indexOf(args[0]) > -1)) {
+							result.push('• ' + username);
+						}
 					}
 				}
 
@@ -78,12 +100,21 @@ export class Command {
 		this.registerCommand('msg', 'Sends a message to a specific user. /msg _nickname_ _message_', (currentRoom: Room, user: User, args: string[]): string => {
 			if (args[0] && args[1] && currentRoom) {
 				for (var usersId in currentRoom.users) {
-					if (currentRoom.users[usersId].username == args[0]) {
-						args.shift();
-						client.broadcast.to(usersId).emit('sendMessage', user, currentRoom.name, 'From ' + currentRoom.users[usersId].username  + ' -> ' + args.join(' '), false);
-						client.emit('sendMessage', user, currentRoom.name, 'To ' + currentRoom.users[usersId].username  + ' -> ' + args.join(' '), false);
+					if (currentRoom.users.hasOwnProperty(usersId)) {
+						if (currentRoom.users[usersId].username === args[0]) {
+							args.shift();
+							client.broadcast.to(usersId).emit('sendMessage', user, currentRoom.name, 'From ' + currentRoom.users[usersId].username + ' -> ' + args.join(' '), false);
+							client.emit('sendMessage', user, currentRoom.name, 'To ' + currentRoom.users[usersId].username + ' -> ' + args.join(' '), false);
+						}
 					}
 				}
+			}
+			return '';
+		});
+
+		this.registerCommand('clear', 'Clear message to a specific channel. /clear', (currentRoom: Room, user: User, args: string[]): string => {
+			if (currentRoom) {
+				client.emit('clear', currentRoom.name);
 			}
 			return '';
 		});
@@ -92,7 +123,9 @@ export class Command {
 			var result = [];
 
 			for (var name in this.commands) {
-				result.push('• ' + name + ': '+ this.commands[name].description);
+				if (this.commands.hasOwnProperty(name)) {
+					result.push('• ' + name + ': ' + this.commands[name].description);
+				}
 			}
 
 			client.emit('sendMessage', user, currentRoom.name, 'List of commands:\n' + result.join('\n'), true);
@@ -105,7 +138,7 @@ export class Command {
 	}
 
 	public parseChat(currentRoom: Room, user: User, message: string): string {
-		if (message.indexOf('/') == 0) {
+		if (message.indexOf('/') === 0) {
 			var args = message.substring(1).split(' ');
 			if (this.commands[args[0]]) {
 				message = this.commands[args[0]].callback(currentRoom, user, args.slice(1));

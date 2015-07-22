@@ -14,12 +14,26 @@ export class Room {
 	}
 
 	public addUser(user: User): void {
+		var nbUserWithSameName: number = 0;
+		for (let key in this.users) {
+			if (this.users.hasOwnProperty(key) && this.users[key].username === user.username) {
+				nbUserWithSameName++;
+				for (let key2 in this.users) {
+					if (this.users.hasOwnProperty(key2) && this.users[key2].username === user.username + nbUserWithSameName) {
+						nbUserWithSameName++;
+					}
+				}
+			}
+		}
+		if (nbUserWithSameName !== 0) {
+			user.username += nbUserWithSameName;
+		}
 		this.users[user.id] = user;
 	}
 
 	public getListUser(): any[] {
 		var result: any[] = [];
-		this.users.forEach((user: any)=> {
+		this.users.forEach((user: any) => {
 			var tmp = {
 				id: user.id,
 				username: user.username
@@ -30,7 +44,7 @@ export class Room {
 	}
 
 	public getNbUser(): number {
-		return Object.keys(this.users).length
+		return Object.keys(this.users).length;
 	}
 
 	public removeUser(id: string): void {
